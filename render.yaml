@@ -1,0 +1,41 @@
+# Render Blueprint: New + > Blueprint > pick this repo.
+# Creates two web services. After the first deploy, copy the backend's
+# public URL (e.g. https://health-monitor-api.onrender.com) into the
+# dashboard's BACKEND_URL environment variable when prompted.
+services:
+  - type: web
+    name: health-monitor-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn backend.app:app --config gunicorn.conf.py
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.7"
+      - key: API_KEY
+        generateValue: true
+      - key: SEED_DEMO_DATA
+        value: "true"
+      # Free instances have no persistent disk: the database is rebuilt
+      # (and the demo data reseeded) on every restart. On a paid plan, add
+      #   disk: {name: health-data, mountPath: /var/data, sizeGB: 1}
+      # and set HEALTH_DB_PATH=/var/data/health.db to keep live readings.
+
+  - type: web
+    name: health-monitor-dashboard
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run dashboard/app.py --server.port $PORT --server.address 0.0.0.0
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.7"
+      - key: BACKEND_URL
+        sync: false
+      - key: API_KEY
+        fromService:
+          type: web
+          name: health-monitor-api
+          envVarKey: API_KEY

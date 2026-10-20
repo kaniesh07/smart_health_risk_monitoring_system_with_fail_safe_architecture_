@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runtime database (recreated + reseeded on boot)
+database/*.db
+database/*.db-*
+database/*.lock
+
+# Secrets
+.env
+
+.venv/
+venv/
+*.egg-info/
+.DS_Store
+
+# NOTE: ml/model.pkl and ml/scaler.pkl are intentionally committed -- the
+# backend needs them at boot. (If they're missing it retrains them itself.)

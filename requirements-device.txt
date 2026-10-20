@@ -1,0 +1,5 @@
+# Extra dependency for firmware/serial_bridge.py (USB-serial boards).
+# Install on the PC / Raspberry Pi the board is plugged into -- not needed
+# on the server.
+requests==2.34.2
+pyserial==3.5

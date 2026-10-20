@@ -1,0 +1,43 @@
+# Full stack on one machine (laptop, Raspberry Pi, VPS):
+#   cp .env.example .env      # optionally set API_KEY
+#   docker compose up -d --build
+# API:       http://<host>:5000     (point boards / serial bridge here)
+# Dashboard: http://<host>:8501
+services:
+  backend:
+    build: .
+    image: smart-health-monitor
+    restart: unless-stopped
+    environment:
+      PORT: "5000"
+      HEALTH_DB_PATH: /data/health.db
+      API_KEY: ${API_KEY:-}
+      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
+      LIVE_TIMEOUT_SECONDS: ${LIVE_TIMEOUT_SECONDS:-20}
+    ports:
+      - "5000:5000"
+    volumes:
+      - health-data:/data
+
+  dashboard:
+    image: smart-health-monitor
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      PORT: "8501"
+      BACKEND_URL: http://backend:5000
+      API_KEY: ${API_KEY:-}
+    command: >
+      sh -c "streamlit run dashboard/app.py --server.port $${PORT} --server.address 0.0.0.0"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=4)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+    ports:
+      - "8501:8501"
+
+volumes:
+  health-data:

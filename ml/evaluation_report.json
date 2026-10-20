@@ -1,0 +1,72 @@
+{
+  "full_system": {
+    "label": "Full system (fusion+baseline+ML)",
+    "accuracy": 0.96,
+    "macro_f1": 0.9599461498236519,
+    "recall_sensitivity": 0.9233333333333333,
+    "specificity": 0.9966666666666667,
+    "false_alarm_rate": 0.0033333333333333335,
+    "critical_recall": 1.0,
+    "missed_critical_event_rate": 0.0,
+    "confusion_matrix": {
+      "TN": 299,
+      "FP": 1,
+      "FN": 23,
+      "TP": 277
+    },
+    "n_critical_cases": 225
+  },
+  "global_only_ablation": {
+    "label": "Global-threshold-only (ablation baseline)",
+    "accuracy": 0.94,
+    "macro_f1": 0.9397832195905259,
+    "recall_sensitivity": 0.88,
+    "specificity": 1.0,
+    "false_alarm_rate": 0.0,
+    "critical_recall": 0.9422222222222222,
+    "missed_critical_event_rate": 0.05777777777777782,
+    "confusion_matrix": {
+      "TN": 300,
+      "FP": 0,
+      "FN": 36,
+      "TP": 264
+    },
+    "n_critical_cases": 225
+  },
+  "improvement_pct": {
+    "macro_f1": 2.1454873648319874,
+    "critical_recall": 6.132075471698117,
+    "false_alarm_rate_reduction": -100.0
+  },
+  "real_data_false_alarm_check": {
+    "flagged": 33,
+    "total": 158,
+    "false_alarm_rate": 0.2088607594936709
+  },
+  "latency_ms": {
+    "mean_ms": 16.525918165085994,
+    "median_ms": 15.885100001469254,
+    "p95_ms": 19.98800997971557,
+    "max_ms": 65.32410002546385,
+    "n_readings": 600
+  },
+  "power_estimate": {
+    "assumptions": {
+      "supply_voltage_v": 3.3,
+      "active_current_ma_datasheet_typical": 170.0,
+      "deep_sleep_current_ma_datasheet_typical": 0.01,
+      "read_interval_s": 3.0,
+      "estimated_active_window_s": 0.35
+    },
+    "as_shipped_always_on": {
+      "avg_current_ma": 170.0,
+      "battery_life_hours_2000mah": 11.764705882352942
+    },
+    "optional_duty_cycled_design": {
+      "duty_cycle_pct": 11.666666666666666,
+      "avg_current_ma": 19.842166666666664,
+      "battery_life_hours_2000mah": 100.79544404592914
+    },
+    "caveat": "ESTIMATE from component datasheets, not a bench measurement -- no physical ESP32/sensor hardware is available in this build environment. Validate on real hardware with an in-circuit current sensor (e.g. INA219) before trusting these numbers."
+  }
+}
